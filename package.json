@@ -1,0 +1,14 @@
+{
+  "name": "quick.xp",
+  "version": "3.0.0",
+  "description": "Simple Leveling Framework for Discord Bots",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Shade",
+  "license": "MIT",
+  "dependencies": {
+    "quick.db": "^7.1.3"
+  }
+}
