@@ -1,6 +1,6 @@
 import { Options } from "quick.db";
 
-declare module "quick.eco" {
+declare module "quick.xp" {
 export class XPManager {
     constructor(options: Options);
 
