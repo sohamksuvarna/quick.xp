@@ -1,6 +1,6 @@
 # quick.xp
 
-### Simple Leveling Framework for Discord Bots
+### Powerful Leveling Framework for Discord Bots
 
 <br>
 
@@ -18,6 +18,8 @@ npm i --save quick.xp
 - Per-guild Leveling System
 - Built-in cooldown
 - Simple and easy to understand
+- Supports MongoDB and SQLite Database
+- TypeScript Support
 - And much more...
 
 <br>
@@ -30,12 +32,12 @@ const xp = new XP.Manager();
 
 <br>
 
-## Quick Example with Discord.JS
+## Quick Discord.JS Example with SQLite Database
 ```js
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const XP = require('quick.xp');
-const xp = new XP.Manager();
+const xp = new XP.SQLiteManager();
  
 client.on('ready', () => {
     console.log('Ready!')
@@ -61,6 +63,37 @@ client.on('message', (message) => {
 client.login("TOKEN");
 ```
 <br>
+
+## Discord.JS Example with MongoDB Database
+```js
+const Discord = require('discord.js');
+const client = new Discord.Client();
+const XP = require('quick.xp');
+const xp = new XP.MongoManager("DB_URL");
+ 
+client.on('ready', () => {
+    console.log('Ready!')
+})
+ 
+client.on('message', async (message) => { // make the function asynchronous and add await
+    const level = await xp.getLevel(message.guild.id, message.author.id)
+    const userxp = await xp.getXP(message.guild.id, message.author.id)
+    await xp.giveXP(message);
+    if (message.content === "level") message.channel.send(`You are on level ${level} and have ${userxp} XP`)
+    if (message.content === "leaderboard") {
+        let lb = await xp.leaderboard(message.guild.id, {limit: 10, raw: false});
+        const embed = new Discord.MessageEmbed()
+        .setTitle("Leaderboard")
+        .setColor("BLURPLE")
+        lb.forEach(m => {
+            embed.addField(`${m.position}. ${client.users.cache.get(m.id).tag}`, `Level: ${level}\n XP: ${m.xp}`)
+        })
+        message.channel.send(embed);
+    }
+})
+ 
+client.login("TOKEN");
+```
 
 ## Need Help? Join the [Support Server](https://discord.gg/mKyRmPB)
 <br>

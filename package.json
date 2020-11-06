@@ -1,7 +1,7 @@
 {
   "name": "quick.xp",
-  "version": "3.0.0",
-  "description": "Simple Leveling Framework for Discord Bots",
+  "version": "4.0.0",
+  "description": "Powerful Leveling Framework for Discord Bots",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,6 +9,7 @@
   "author": "Shade",
   "license": "MIT",
   "dependencies": {
-    "quick.db": "^7.1.3"
+    "quick.db": "^7.1.3",
+    "quickmongo": "^2.0.6"
   }
 }

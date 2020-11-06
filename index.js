@@ -1,4 +1,4 @@
 module.exports = {
-    Manager: require("./src/XPManager"),
+    SQLiteManager: require("./src/SQLiteManager"),
     version: require('./package.json').version
 }
