@@ -4,7 +4,7 @@ let db;
 class MongoManager {
 
     constructor(mongodbURL) {
-     db = new Database(mongodbURL)    
+     this.db = new Database(mongodbURL)    
     }
 
     /**
@@ -19,24 +19,24 @@ async giveXP(message, xprate) {
     if (isNaN(xprate)) throw new XPError(`The XP Rate provided isn't a number!`)
     
     let cooldown = 60000;
-    let level = await db.get(`level_${message.guild.id}_${message.author.id}`) || db.set(`level_${message.guild.id}_${message.author.id}`, 0); 
-    let lastxp = await db.get(`xpcooldown_${message.guild.id}_${message.author.id}`);
+    let level = await this.db.get(`level_${message.guild.id}_${message.author.id}`) || db.set(`level_${message.guild.id}_${message.author.id}`, 0); 
+    let lastxp = await this.db.get(`xpcooldown_${message.guild.id}_${message.author.id}`);
     if (lastxp !== null && cooldown - (Date.now() - lastxp) > 0) return;
     
     let amount = (Math.floor(Math.random() * 5) + 15) * xprate;
-    let xp = await db.add(`xp_${message.guild.id}_${message.author.id}`, amount);
-    let previousrequired = await db.get(`previousrequired_${message.guild.id}_${message.author.id}`);
-    if (previousrequired === null) await db.set(`previousrequired_${message.guild.id}_${message.author.id}`, 0);
+    let xp = await this.db.add(`xp_${message.guild.id}_${message.author.id}`, amount);
+    let previousrequired = await this.db.get(`previousrequired_${message.guild.id}_${message.author.id}`);
+    if (previousrequired === null) await this.db.set(`previousrequired_${message.guild.id}_${message.author.id}`, 0);
     
     let nextlevel = level + 1;
     let required = previousrequired + 50 * nextlevel;
-    await db.set(`requiredxp_${message.guild.id}_${message.author.id}`, required);
-    await db.set(`xpcooldown_${message.guild.id}_${message.author.id}`, Date.now());
-    let abacus = await db.get(`requiredxp_${message.guild.id}_${message.author.id}`) || db.set(`requiredxp_${message.guild.id}_${message.author.id}`, 50);
+    await this.db.set(`requiredxp_${message.guild.id}_${message.author.id}`, required);
+    await this.db.set(`xpcooldown_${message.guild.id}_${message.author.id}`, Date.now());
+    let abacus = await this.db.get(`requiredxp_${message.guild.id}_${message.author.id}`) || db.set(`requiredxp_${message.guild.id}_${message.author.id}`, 50);
 
     if (xp > required) {
-        await db.set(`previousrequired_${message.guild.id}_${message.author.id}`, required);
-        await db.set(`level_${message.guild.id}_${message.author.id}`, nextlevel);
+        await this.db.set(`previousrequired_${message.guild.id}_${message.author.id}`, required);
+        await this.db.set(`level_${message.guild.id}_${message.author.id}`, nextlevel);
         message.channel.send(`:tada: | ${message.author.tag} just advanced to level ${nextlevel}`).then(m => m.delete({timeout: 10000}));
 
     }
@@ -51,7 +51,7 @@ async giveXP(message, xprate) {
 async getLevel(guildid, userid) {
  if (!guildid) throw new XPError('Guild ID was not provided!')
  if (!userid) throw new XPError('User ID was not provided!');
- return await db.get(`level_${guildid}_${userid}`)
+ return await this.db.get(`level_${guildid}_${userid}`)
 }
 
 /**
@@ -63,7 +63,7 @@ async getLevel(guildid, userid) {
 async getXP(guildid, userid) {
     if (!guildid) throw new XPError('Guild ID was not provided!')
     if (!userid) throw new XPError('User ID was not provided!');
-    return await db.get(`xp_${guildid}_${userid}`)       
+    return await this.db.get(`xp_${guildid}_${userid}`)       
 }
 
 /**
@@ -77,7 +77,7 @@ async leaderboard(guildid, options = {}) {
         let limit = options.limit || 10;
         if (isNaN(limit)) throw new XPError("The limit provided isn't a number!");
         let raw = options.raw || false;
-        let all = await db.startsWith(`xp_${guildid}_`)
+        let all = await this.db.startsWith(`xp_${guildid}_`)
         let lb = all.sort((a, b) => b.data - a.data);
         if (!(parseInt(limit) <= 0)) lb.length = parseInt(limit);
         if (raw === true) return lb;
@@ -105,8 +105,8 @@ async leaderboard(guildid, options = {}) {
 async resetLevel(guildid, userid) {
     if (!guildid) throw new XPError('Guild ID was not provided!')
     if (!userid) throw new XPError('User ID was not provided!');
-    await db.delete(`xp_${guildid}_${userid}`)
-    await db.delete(`level_${guildid}_${userid}`)
+    await this.db.delete(`xp_${guildid}_${userid}`)
+    await this.db.delete(`level_${guildid}_${userid}`)
     return `Data of "${userid}" for "${guildid}" has been deleted. Their levels are reset.`
 }
 
@@ -116,7 +116,7 @@ async resetLevel(guildid, userid) {
 
 async reset() {
     console.log('The database was reset');
-    db.deleteAll()
+    this.db.deleteAll()
 }
 
 }
