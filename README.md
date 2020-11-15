@@ -98,6 +98,7 @@ client.login("TOKEN");
 ## Upcoming Changes
 - Option to choose storage within XPManager Class
 - JSON Storage
+- Some more stuff
 <br>
 
 ## Need Help? Join the [Support Server](https://discord.gg/mKyRmPB)
