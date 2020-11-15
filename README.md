@@ -95,6 +95,10 @@ client.on('message', async (message) => { // make the function asynchronous and 
 client.login("TOKEN");
 ```
 
+## Upcoming Changes
+- Option to choose storage within XPManager Class
+- JSON Storage 
+
 ## Need Help? Join the [Support Server](https://discord.gg/mKyRmPB)
 <br>
 
