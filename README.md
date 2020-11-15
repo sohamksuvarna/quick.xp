@@ -27,7 +27,7 @@ npm i --save quick.xp
 ## Getting Started
 ```js
 const XP = require("quick.xp")
-const xp = new XP.Manager();
+const xp = new XP.SQLiteManager(); // you can use XP.MongoManager("MONGO_URL") if you want to use MongoDB Storage
 ```
 
 <br>
