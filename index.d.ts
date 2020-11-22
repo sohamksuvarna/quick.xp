@@ -35,7 +35,7 @@ declare module "quick.xp" {
         public getLevel(message: object, userid: string): Promise<number>;
         public getXP(messag: object, userid: string): Promise<number>;
         public leaderboard(message: object, limit: number): Promise<Leaderboard[]>;
-        public resetLevel(message: object, userid: string): Promise<boolean>;
+        public resetLevel(message: object | string, userid: string): Promise<boolean>;
         public reset(): Promise<boolean>;
         public validateOptions(): boolean;
 
@@ -56,7 +56,7 @@ declare module "quick.xp" {
         public giveXP(message: object, xprate: number): Promise<number>;
         public getLevel(message: object, userid: string): Promise<number>;
         public getXP(message: object, userid: string): Promise<number>;
-        public leaderboard(message: object | false, limit: number): Promise<Leaderboard[]>;
+        public leaderboard(message: object | string, limit: number): Promise<Leaderboard[]>;
         public resetLevel(message: object, userid: string): Promise<boolean>;
         public reset(): Promise<boolean>;
         public validateOptions(): boolean
