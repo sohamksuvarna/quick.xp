@@ -149,9 +149,9 @@ class SQLiteManager {
     * @param {boolean} [options.raw=false] Raw
     * @returns leaderboard[]
     */
-   leaderboard(message, options) {
-        const limit = 10;
-        const raw = false;
+   leaderboard(message, options = { limit: 10, raw: false}) {
+        const limit = options.limit || 10;
+        const raw = options.raw || false;
         const final = [];
         if (!message.guild.id) throw new XPError("Guild ID is invalid!")
         if (isNaN(limit)) throw new XPError("Limit provided isn't a number!");
