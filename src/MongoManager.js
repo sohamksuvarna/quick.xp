@@ -179,17 +179,23 @@ class MongoManager {
 
     /**
     * resetLevel - Reset Level of the Specified User
-    * @param {object} message - Message Object
+    * @param {object} message - Message Object or Guild ID
     * @param {string} userid - User ID
     */
     async resetLevel(message, userid) {
-        if (!message.guild.id) throw new XPError('Guild ID was not provided!')
+        let guildid;
+        if(typeof(message) == "string" || typeof(message) == "number"){
+            guildid = message;
+        }else{
+        guildid = message.guild.id;
+        }
+        if (!guildid) throw new XPError('Guild ID was not provided!')
         if (!userid) throw new XPError('User ID was not provided!');
 
-        await this.db.delete(`xp_${message.guild.id}_${userid}`)
-        await this.db.delete(`level_${message.guild.id}_${userid}`)
+        await this.db.delete(`xp_${guildid}_${userid}`)
+        await this.db.delete(`level_${guildid}_${userid}`)
 
-        return `Data of "<@${userid}>" for "${message.guild.id}" has been deleted. Their levels are reset.`
+        return `Data of "<@${userid}>" for "${guildid}" has been deleted. Their levels are reset.`
     }
 
     /**
