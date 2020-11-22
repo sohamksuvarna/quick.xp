@@ -176,15 +176,21 @@ class SQLiteManager {
 
     /**
     * resetLevel - Reset The Level of a User
-    * @param {object} message  Message Object
+    * @param {object} message  Message Object or Guild ID
     * @param {string} userid User ID
     */
     resetLevel(message, userid) {
-        if (!message.guild.id) throw new XPError('Guild ID is not valid!')
+        let guildid;
+        if(typeof(message) == "string" || typeof(message) == "number"){
+            guildid = message;
+        } else{
+            guildid = message.guild.id;
+        }
+        if (!guildid) throw new XPError('Guild ID is not valid!');
         if (!userid) throw new XPError('User ID was not provided!');
-        db.delete(`xp_${message.guild.id}_${userid}`)
-        db.delete(`level_${message.guild.id}_${userid}`)
-        return `Data of "${userid}" for "${message.guild.id}" has been deleted. Their levels are reset.`
+        db.delete(`xp_${guildid}_${userid}`)
+        db.delete(`level_${guildid}_${userid}`)
+        return `Data of "${userid}" for "${guildid}" has been deleted. Their levels are reset.`
     }
 
 
