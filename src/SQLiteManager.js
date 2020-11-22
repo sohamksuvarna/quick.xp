@@ -115,45 +115,48 @@ class SQLiteManager {
 
     /**
      * getLevel - Get Level of the Specified User
-     * @param {string} guildid Guild ID
+     * @param {object} message Message Object
      * @param {string} userid User ID
     */
 
-    getLevel(guildid, userid) {
-        if (!guildid) throw new XPError('Guild ID was not provided!')
-        if (!userid) throw new XPError('User ID was not provided!');
-        return db.get(`level_${guildid}_${userid}`)
+    getLevel(message, userid) {
+        if (!message.guild.id) throw new XPError('Guild ID is not valid!')
+        if (!userid){        //throw new XPError('User ID was not provided!');
+        return db.get(`level_${message.guild.id}_${message.author.id}`)
+       }
+       return db.get(`level_${message.guild.id}_${userid}`)
     }
 
     /**
     * getXP - Get XP of the Specified User
-    * @param {string} guildid Guild ID
+    * @param {object} message Message Object
     * @param {string} userid User ID 
     */
 
-    getXP(guildid, userid) {
-        if (!guildid) throw new XPError('Guild ID was not provided!')
-        if (!userid) throw new XPError('User ID was not provided!');
-        return db.get(`xp_${guildid}_${userid}`)
+    getXP(message, userid) {
+        if (!message.guild.id) throw new XPError('Guild ID is not valid!')
+        if (!userid) {                      // throw new XPError('User ID was not provided!');
+        return db.get(`xp_${message.guild.id}_${message.author.id}`)
     }
+    return db.get(`xp_${message.guild.id}_${message.author.id}`)
+}
 
     /**
     * leaderboard - leaderboard
-    * @param {string} guildid Guild ID
+    * @param {object} message Message Object
     * @param {object} options Options = { limit: 10, raw: false }
     * @param {number} [options.limit=10] Limit
     * @param {boolean} [options.raw=false] Raw
     * @returns leaderboard[]
     */
-    leaderboard(guildid, options = { limit: 10, raw: false}) {
-        const limit = options.limit;
-        const raw = options.raw || false;
+   leaderboard(message, options) {
+        const limit = 10;
+        const raw = false;
         const final = [];
-
-        if (!guildid) throw new XPError("Guild ID wasn't provided!")
+        if (!message.guild.id) throw new XPError("Guild ID is invalid!")
         if (isNaN(limit)) throw new XPError("Limit provided isn't a number!");
         
-        let lb = db.fetchAll().filter(data => data.ID.startsWith(`xp_${guildid}_`)).sort((a, b) => b.data - a.data);
+        let lb = db.fetchAll().filter(data => data.ID.startsWith(`xp_${message.guild.id}_`)).sort((a, b) => b.data - a.data);
         let i = 0;
         
         if (!(parseInt(limit) <= 0)) lb.length = parseInt(limit);
@@ -173,16 +176,17 @@ class SQLiteManager {
 
     /**
     * resetLevel - Reset The Level of a User
-    * @param {string} guildid Guild ID
+    * @param {object} message  Message Object
     * @param {string} userid User ID
     */
-    resetLevel(guildid, userid) {
-        if (!guildid) throw new XPError('Guild ID was not provided!')
+    resetLevel(message, userid) {
+        if (!message.guild.id) throw new XPError('Guild ID is not valid!')
         if (!userid) throw new XPError('User ID was not provided!');
-        db.delete(`xp_${guildid}_${userid}`)
-        db.delete(`level_${guildid}_${userid}`)
-        return `Data of "${userid}" for "${guildid}" has been deleted. Their levels are reset.`
+        db.delete(`xp_${message.guild.id}_${userid}`)
+        db.delete(`level_${message.guild.id}_${userid}`)
+        return `Data of "${userid}" for "${message.guild.id}" has been deleted. Their levels are reset.`
     }
+
 
     /**
     * reset - Delete the Database
