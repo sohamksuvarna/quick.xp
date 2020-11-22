@@ -117,41 +117,45 @@ class MongoManager {
 
     /**
     * getLevel - Get Level of the Specified User
-    * @param {string} guildid Guild ID
+    * @param {object} message Message Object
     * @param {string} userid User ID
     */
-    async getLevel(guildid, userid) {
-        if (!guildid) throw new XPError('Guild ID was not provided!')
-        if (!userid) throw new XPError('User ID was not provided!');
-        return await this.db.get(`level_${guildid}_${userid}`)
+    async getLevel(message, userid) {
+        if (!message.guild.id) throw new XPError('Guild ID was not provided!')
+        if (!userid){ //throw new XPError('User ID was not provided!');
+        return await this.db.get(`level_${message.guild.id}_${message.author.id}`)
+        }
+        return await this.db.get(`level_${message.guild.id}_${userid}`)
     }
 
     /**
     * getXP - Get XP of the Specified User
-    * @param {string} guildid Guild ID
+    * @param {object} message Message Object
     * @param {number} userid User ID 
     */
-    async getXP(guildid, userid) {
-        if (!guildid) throw new XPError('Guild ID was not provided!')
-        if (!userid) throw new XPError('User ID was not provided!');
-        return await this.db.get(`xp_${guildid}_${userid}`)
+    async getXP(message, userid) {
+        if (!message.guild.id) throw new XPError('Guild ID was not provided!')
+        if (!userid) { // throw new XPError('User ID was not provided!');
+        return await this.db.get(`xp_${message.guild.id}_${message.author.id}`)
     }
+    return await this.db.get(`xp_${message.guild.id}_${userid}`)
+}
 
     /**
     * leaderboard - leaderboard
-    * @param {string} guildid Guild ID
+    * @param {object} message Message Object
     * @param {object} options Options 
     * @param {number} [options.limit=10] Limit
     * @param {boolean} [options.raw=false] Raw 
     * @returns leaderboard[]
     */
-    async leaderboard(guildid, options = {}) {
-        if (!guildid || typeof guildid !== 'string') throw new XPError("Invalid Guild ID");
+    async leaderboard(message, options = {}) {
+        if (!message.guild.id) throw new XPError("Invalid Guild ID");
         if (isNaN(limit)) throw new XPError("The limit provided isn't a number!");
 
         const limit = options.limit || 10;
         const raw = options.raw || false;
-        const all = await this.db.startsWith(`xp_${guildid}_`);
+        const all = await this.db.startsWith(`xp_${message.guild.id}_`);
 
         let lb = all.sort((a, b) => b.data - a.data);
         let final = [];
@@ -175,17 +179,17 @@ class MongoManager {
 
     /**
     * resetLevel - Reset Level of the Specified User
-    * @param {string} guildid - Guild ID
+    * @param {object} message - Message Object
     * @param {string} userid - User ID
     */
-    async resetLevel(guildid, userid) {
-        if (!guildid) throw new XPError('Guild ID was not provided!')
+    async resetLevel(message, userid) {
+        if (!message.guild.id) throw new XPError('Guild ID was not provided!')
         if (!userid) throw new XPError('User ID was not provided!');
 
-        await this.db.delete(`xp_${guildid}_${userid}`)
-        await this.db.delete(`level_${guildid}_${userid}`)
+        await this.db.delete(`xp_${message.guild.id}_${userid}`)
+        await this.db.delete(`level_${message.guild.id}_${userid}`)
 
-        return `Data of "${userid}" for "${guildid}" has been deleted. Their levels are reset.`
+        return `Data of "<@${userid}>" for "${message.guild.id}" has been deleted. Their levels are reset.`
     }
 
     /**
