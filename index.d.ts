@@ -32,10 +32,10 @@ declare module "quick.xp" {
         constructor(options: Options);
 
         public giveXP(message: object, xprate: number): Promise<number>;
-        public getLevel(guildid: string, userid: string): Promise<number>;
-        public getXP(guildid: string, userid: string): Promise<number>;
-        public leaderboard(guildid: string | false, limit: number): Promise<Leaderboard[]>;
-        public resetLevel(guildid: string, userid: string): Promise<boolean>;
+        public getLevel(message: object, userid: string): Promise<number>;
+        public getXP(messag: object, userid: string): Promise<number>;
+        public leaderboard(message: object, limit: number): Promise<Leaderboard[]>;
+        public resetLevel(message: object, userid: string): Promise<boolean>;
         public reset(): Promise<boolean>;
         public validateOptions(): boolean;
 
@@ -54,10 +54,10 @@ declare module "quick.xp" {
         constructor(options: MongoOptions);
 
         public giveXP(message: object, xprate: number): Promise<number>;
-        public getLevel(guildid: string, userid: string): Promise<number>;
-        public getXP(guildid: string, userid: string): Promise<number>;
-        public leaderboard(guildid: string | false, limit: number): Promise<Leaderboard[]>;
-        public resetLevel(guildid: string, userid: string): Promise<boolean>;
+        public getLevel(message: object, userid: string): Promise<number>;
+        public getXP(message: object, userid: string): Promise<number>;
+        public leaderboard(message: object | false, limit: number): Promise<Leaderboard[]>;
+        public resetLevel(message: object, userid: string): Promise<boolean>;
         public reset(): Promise<boolean>;
         public validateOptions(): boolean
 
