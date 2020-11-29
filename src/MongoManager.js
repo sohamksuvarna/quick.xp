@@ -56,7 +56,7 @@ class MongoManager {
 
     /**
     * giveXP - Give XP on message
-    * @param {Object} message Message Object
+    * @param {Object} message Message Object 
     * @param {Number} xprate The rate of XP
     */
     async giveXP(message, XPrate = 1) {
