@@ -54,7 +54,7 @@ class SQLiteManager {
 
     /**
     * giveXP - Give XP to a user
-    * @param {object} message - User Message Object
+    * @param {object} message - Message Object 
     * @param {number} xprate - The rate of XP
     */
     giveXP(message, xprate) {
