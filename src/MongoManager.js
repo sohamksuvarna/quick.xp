@@ -56,11 +56,12 @@ class MongoManager {
 
     /**
     * giveXP - Give XP on message
-    * @param {String} message Message Parameter
+    * @param {Object} message Message Object 
     * @param {Number} xprate The rate of XP
     */
     async giveXP(message, XPrate = 1) {
-        if (!message) throw new XPError('Message was not provided!')
+        if (!message) throw new XPError('Message was not provided!');
+        if(!message.guild.id) throw new XPError('Message is not in a guild!');
         if (!xprate) xprate = 1;
         if (isNaN(xprate)) throw new XPError(`The XP Rate provided isn't a number!`);
 
