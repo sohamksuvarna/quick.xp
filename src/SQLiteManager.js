@@ -54,11 +54,12 @@ class SQLiteManager {
 
     /**
     * giveXP - Give XP to a user
-    * @param {string} message - User Message 
+    * @param {object} message - User Message Object
     * @param {number} xprate - The rate of XP
     */
     giveXP(message, xprate) {
-        if (!message) throw new XPError('Message was not provided!')
+        if (!message) throw new XPError('Message was not provided!');
+        if(!message.guild.id) throw new XPError('Message is not in a guild!');
         if (!xprate) xprate = 1;
         if (isNaN(xprate)) throw new XPError(`The XP Rate provided isn't a number!`);
 
