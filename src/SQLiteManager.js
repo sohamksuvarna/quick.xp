@@ -139,7 +139,7 @@ class SQLiteManager {
         if (!userid) {                      // throw new XPError('User ID was not provided!');
             return db.get(`xp_${message.guild.id}_${message.author.id}`)
         }
-        return db.get(`xp_${message.guild.id}_${message.author.id}`)
+        return db.get(`xp_${message.guild.id}_${userid}`)
     }
 
     /**
