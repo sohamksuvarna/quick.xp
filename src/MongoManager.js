@@ -59,9 +59,9 @@ class MongoManager {
     * @param {Object} message Message Object 
     * @param {Number} xprate The rate of XP
     */
-    async giveXP(message, XPrate = 1) {
+    async giveXP(message, xprate = 1) {
         if (!message) throw new XPError('Message was not provided!');
-        if(!message.guild.id) throw new XPError('Message is not in a guild!');
+        if (!message.guild.id) throw new XPError('Message is not in a guild!');
         if (!xprate) xprate = 1;
         if (isNaN(xprate)) throw new XPError(`The XP Rate provided isn't a number!`);
 
@@ -123,8 +123,8 @@ class MongoManager {
     */
     async getLevel(message, userid) {
         if (!message.guild.id) throw new XPError('Guild ID was not provided!')
-        if (!userid){ //throw new XPError('User ID was not provided!');
-        return await this.db.get(`level_${message.guild.id}_${message.author.id}`)
+        if (!userid) { //throw new XPError('User ID was not provided!');
+            return await this.db.get(`level_${message.guild.id}_${message.author.id}`)
         }
         return await this.db.get(`level_${message.guild.id}_${userid}`)
     }
@@ -137,10 +137,10 @@ class MongoManager {
     async getXP(message, userid) {
         if (!message.guild.id) throw new XPError('Guild ID was not provided!')
         if (!userid) { // throw new XPError('User ID was not provided!');
-        return await this.db.get(`xp_${message.guild.id}_${message.author.id}`)
+            return await this.db.get(`xp_${message.guild.id}_${message.author.id}`)
+        }
+        return await this.db.get(`xp_${message.guild.id}_${userid}`)
     }
-    return await this.db.get(`xp_${message.guild.id}_${userid}`)
-}
 
     /**
     * leaderboard - leaderboard
@@ -185,10 +185,10 @@ class MongoManager {
     */
     async resetLevel(message, userid) {
         let guildid;
-        if(typeof(message) == "string" || typeof(message) == "number"){
+        if (typeof (message) == "string" || typeof (message) == "number") {
             guildid = message;
-        }else{
-        guildid = message.guild.id;
+        } else {
+            guildid = message.guild.id;
         }
         if (!guildid) throw new XPError('Guild ID was not provided!')
         if (!userid) throw new XPError('User ID was not provided!');
@@ -216,8 +216,8 @@ class MongoManager {
      */
     substitute(user, level) {
         return this.levelUpMessage
-            .replace('{{user}}', user)
-            .replace('{{level}}', level);
+            .replace(/{{user}}/g, user)
+            .replace(/{{level}}/g, level);
     }
 
     /**
