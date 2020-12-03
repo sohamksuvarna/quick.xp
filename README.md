@@ -9,7 +9,7 @@
 <br>
 
 ## Installation
-```
+```sh
 npm i --save quick.xp
 ```
 <br>

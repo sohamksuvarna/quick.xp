@@ -137,10 +137,10 @@ class SQLiteManager {
     getXP(message, userid) {
         if (!message.guild.id) throw new XPError('Guild ID is not valid!')
         if (!userid) {                      // throw new XPError('User ID was not provided!');
+            return db.get(`xp_${message.guild.id}_${message.author.id}`)
+        }
         return db.get(`xp_${message.guild.id}_${message.author.id}`)
     }
-    return db.get(`xp_${message.guild.id}_${message.author.id}`)
-}
 
     /**
     * leaderboard - leaderboard
@@ -213,8 +213,8 @@ class SQLiteManager {
      */
     substitute(user, level) {
         return this.levelUpMessage
-            .replace('{{user}}', user)
-            .replace('{{level}}', level);
+            .replace(/{{user}}/g, user)
+            .replace(/{{level}}/g, level);
     }
 
     /**
