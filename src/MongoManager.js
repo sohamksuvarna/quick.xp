@@ -21,7 +21,7 @@ class MongoManager {
          * Database
          * @type {Database}
          */
-        this.db = new Database(mongodbURL);
+        this.db = new Database(options.mongodbURL);
 
         /**
          * Cooldown
