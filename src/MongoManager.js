@@ -87,7 +87,7 @@ class MongoManager {
 
         this.db.set(KEYS.REQUIRED_XP, required);
         this.db.set(KEYS.COOLDOWN, Date.now());
-        await this.db.get(KEYS.REQUIRED_XP) || this.db.set(REQUIRED_XP_KEY, 50);
+        await this.db.get(KEYS.REQUIRED_XP) || this.db.set(KEYS.REQUIRED_XP, 50);
 
         if (xp > required) {
             this.db.set(KEYS.PREVIOUSLY_REQUIRED, required);
