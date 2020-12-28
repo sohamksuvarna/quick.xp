@@ -73,25 +73,25 @@ class MongoManager {
 
         let cooldown = this.cooldown;
         let level = await this.db.get(KEYS.LEVEL) ||await this.db.set(KEYS.LEVEL, 0);
-        let lastxp =await db.get(KEYS.COOLDOWN);
+        let lastxp =await this.db.get(KEYS.COOLDOWN);
         let amount = (Math.floor(Math.random() * 5) + 15) * xprate;
 
         if (lastxp !== null && cooldown - (Date.now() - lastxp) > 0) return;
 
-        let xp = db.add(`xp_${message.guild.id}_${message.author.id}`, amount);
+        let xp = this.db.add(`xp_${message.guild.id}_${message.author.id}`, amount);
         let nextlevel = level + 1;
-        let previousrequired = await db.get(KEYS.PREVIOUSLY_REQUIRED);
+        let previousrequired = await this.db.get(KEYS.PREVIOUSLY_REQUIRED);
 
-        if (!previousrequired) db.set(KEYS.PREVIOUSLY_REQUIRED, 0);
+        if (!previousrequired) this.db.set(KEYS.PREVIOUSLY_REQUIRED, 0);
         let required = previousrequired + 50 * nextlevel;
 
-        db.set(KEYS.REQUIRED_XP, required);
-        db.set(KEYS.COOLDOWN, Date.now());
-        await db.get(KEYS.REQUIRED_XP) || db.set(REQUIRED_XP_KEY, 50);
+        this.db.set(KEYS.REQUIRED_XP, required);
+        this.db.set(KEYS.COOLDOWN, Date.now());
+        await this.db.get(KEYS.REQUIRED_XP) || this.db.set(REQUIRED_XP_KEY, 50);
 
         if (xp > required) {
-            db.set(KEYS.PREVIOUSLY_REQUIRED, required);
-            db.set(KEYS.LEVEL, nextlevel);
+            this.db.set(KEYS.PREVIOUSLY_REQUIRED, required);
+            this.db.set(KEYS.LEVEL, nextlevel);
 
             if (!this.levelUpChannel && !this.dm) message.channel.send(this.substitute(message.author.tag, nextlevel)).then(m => m.delete({ timeout: 10000 }));
             if (this.levelUpChannel) {
