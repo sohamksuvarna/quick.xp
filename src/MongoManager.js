@@ -53,7 +53,6 @@ class MongoManager {
         this.noDM = options.noDM || undefined;
 
     }
-
     /**
     * giveXP - Give XP on message
     * @param {Object} message Message Object 
@@ -73,22 +72,22 @@ class MongoManager {
         }
 
         let cooldown = this.cooldown;
-        let level = db.get(KEYS.LEVEL) || db.set(KEYS.LEVEL, 0);
-        let lastxp = db.get(KEYS.COOLDOWN);
+        let level = await this.db.get(KEYS.LEVEL) ||await this.db.set(KEYS.LEVEL, 0);
+        let lastxp =await db.get(KEYS.COOLDOWN);
         let amount = (Math.floor(Math.random() * 5) + 15) * xprate;
 
         if (lastxp !== null && cooldown - (Date.now() - lastxp) > 0) return;
 
         let xp = db.add(`xp_${message.guild.id}_${message.author.id}`, amount);
         let nextlevel = level + 1;
-        let previousrequired = db.get(KEYS.PREVIOUSLY_REQUIRED);
+        let previousrequired = await db.get(KEYS.PREVIOUSLY_REQUIRED);
 
         if (!previousrequired) db.set(KEYS.PREVIOUSLY_REQUIRED, 0);
         let required = previousrequired + 50 * nextlevel;
 
         db.set(KEYS.REQUIRED_XP, required);
         db.set(KEYS.COOLDOWN, Date.now());
-        db.get(KEYS.REQUIRED_XP) || db.set(REQUIRED_XP_KEY, 50);
+        await db.get(KEYS.REQUIRED_XP) || db.set(REQUIRED_XP_KEY, 50);
 
         if (xp > required) {
             db.set(KEYS.PREVIOUSLY_REQUIRED, required);
